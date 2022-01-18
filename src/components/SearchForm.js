@@ -1,18 +1,16 @@
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 
-const SearchForm = () => {
+const SearchForm = ({ onSetSearchValue, onSubmit, searchValue }) => {
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.searchInput}
         placeholder="Search joke by word"
-        value={''}
-        onChangeText={() => console.log('works')}
+        value={searchValue}
+        onChangeText={(e) => onSetSearchValue(e)}
+        onSubmitEditing={onSubmit}
+        returnKeyType={'search'}
       />
-      <TouchableOpacity
-        style={styles.searchButton}
-        onPress={() => console.log('searching...')}
-      ></TouchableOpacity>
     </View>
   );
 };

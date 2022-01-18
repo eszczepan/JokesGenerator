@@ -1,33 +1,84 @@
 import { useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, Pressable } from 'react-native';
+import { StatusBar, StyleSheet, View, Modal } from 'react-native';
+import Header from './src/components/Header';
 import SearchForm from './src/components/SearchForm';
+import Button from './src/components/Button';
+import Joke from './src/components/Joke';
+import CategoryCard from './src/components/CategoryCard';
 
-export default function App() {
+const App = () => {
   const [joke, setJoke] = useState(null);
+  const [category, setCategory] = useState('Any');
+  const [searchValue, setSearchValue] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const getJoke = async () => {
-    const response = await fetch('https://v2.jokeapi.dev/joke/Any?type=single');
+  const fetchJoke = async () => {
+    const response = await fetch(
+      `https://v2.jokeapi.dev/joke/${category}?type=single&contains=${searchValue}`
+    );
     const responseJSON = await response.json();
     setJoke(responseJSON.joke);
   };
 
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+    setJoke(null);
+    setModalVisible(!modalVisible);
+  };
+
+  const handleSearchSubmit = () => {
+    setCategory('Any');
+    fetchJoke();
+    setSearchValue('');
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Jokes Generator</Text>
-      </View>
-      <SearchForm />
-      <View style={styles.joke}>
-        <Text style={styles.jokeText}>
-          {joke === null ? 'Click button below to see a joke' : joke}
-        </Text>
-      </View>
-      <Pressable style={styles.button} onPress={() => getJoke()}>
-        <Text style={styles.buttonText}>Get Joke</Text>
-      </Pressable>
+      <Header />
+      <SearchForm
+        searchValue={searchValue}
+        onSetSearchValue={setSearchValue}
+        onSubmit={handleSearchSubmit}
+      />
+      <Joke joke={joke} category={category} />
+      <Button text={'Generate Joke'} onPress={() => fetchJoke()} />
+      <Button text={'Select Category'} onPress={() => setModalVisible(true)} />
+
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View>
+          <CategoryCard
+            category={'Random'}
+            onPress={() => handleCategoryChange('Any')}
+          />
+          <CategoryCard
+            category={'Programming'}
+            onPress={() => handleCategoryChange('Programming')}
+          />
+          <CategoryCard
+            category={'Misc'}
+            onPress={() => handleCategoryChange('Misc')}
+          />
+          <CategoryCard
+            category={'Dark'}
+            onPress={() => handleCategoryChange('Dark')}
+          />
+          <Button
+            text={'Back'}
+            onPress={() => setModalVisible(!modalVisible)}
+          />
+        </View>
+      </Modal>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -36,46 +87,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: StatusBar.currentHeight,
   },
-  header: {
-    width: '100%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#841584',
-    borderRadius: 2,
-    elevation: 3,
-  },
-  headerText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    letterSpacing: 1,
-  },
-  joke: {
-    flex: 1,
-    minHeight: 150,
-    paddingHorizontal: 35,
-  },
-  jokeText: {
-    fontSize: 16,
-    lineHeight: 30,
-    letterSpacing: 0.25,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#841584',
-    color: '#fff',
-    marginVertical: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 60,
-    borderRadius: 4,
-    elevation: 3,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    lineHeight: 21,
-    letterSpacing: 0.25,
-  },
 });
+
+export default App;

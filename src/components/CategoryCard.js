@@ -8,8 +8,9 @@ const CategoryCard = ({ category, onPress }) => (
 
 const styles = StyleSheet.create({
   card: {
-    margin: 20,
-    backgroundColor: 'white',
+    width: '90%',
+    marginVertical: 20,
+    backgroundColor: '#fff',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
@@ -23,8 +24,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   cardText: {
-    marginBottom: 15,
     textAlign: 'center',
+    fontSize: 22,
+    color: '#841584',
+    fontWeight: 'bold',
   },
 });
 

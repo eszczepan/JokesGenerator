@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { StatusBar, StyleSheet, View, Modal } from 'react-native';
+import { StatusBar, StyleSheet, Modal, ImageBackground } from 'react-native';
 import Header from './src/components/Header';
 import SearchForm from './src/components/SearchForm';
 import Button from './src/components/Button';
 import Joke from './src/components/Joke';
 import CategoryCard from './src/components/CategoryCard';
+
+const image = require('./assets/bg.png');
 
 const App = () => {
   const [joke, setJoke] = useState(null);
@@ -33,7 +35,7 @@ const App = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={image} resizeMode="cover" style={styles.container}>
       <Header />
       <SearchForm
         searchValue={searchValue}
@@ -41,19 +43,14 @@ const App = () => {
         onSubmit={handleSearchSubmit}
       />
       <Joke joke={joke} category={category} />
-      <Button text={'Generate Joke'} onPress={() => fetchJoke()} />
-      <Button text={'Select Category'} onPress={() => setModalVisible(true)} />
+      <Button text={'🔥 Generate Joke 🔥'} onPress={() => fetchJoke()} />
+      <Button
+        text={'🌸 Select Category 🌸'}
+        onPress={() => setModalVisible(true)}
+      />
 
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View>
+      <Modal animationType="slide" transparent={false} visible={modalVisible}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.modal}>
           <CategoryCard
             category={'Random'}
             onPress={() => handleCategoryChange('Any')}
@@ -70,13 +67,14 @@ const App = () => {
             category={'Dark'}
             onPress={() => handleCategoryChange('Dark')}
           />
+
           <Button
-            text={'Back'}
+            text={'← Back'}
             onPress={() => setModalVisible(!modalVisible)}
           />
-        </View>
+        </ImageBackground>
       </Modal>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -84,8 +82,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#fff',
     marginTop: StatusBar.currentHeight,
+  },
+  modal: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: StatusBar.currentHeight,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 

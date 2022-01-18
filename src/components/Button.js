@@ -8,22 +8,24 @@ const Button = ({ onPress, text }) => (
 
 const styles = StyleSheet.create({
   button: {
+    width: '85%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#841584',
     color: '#fff',
-    marginVertical: 20,
-    paddingVertical: 12,
+    marginTop: 20,
+    marginBottom: 15,
+    paddingVertical: 15,
     paddingHorizontal: 60,
     borderRadius: 50,
     elevation: 3,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     lineHeight: 21,
-    letterSpacing: 0.25,
+    letterSpacing: 0.75,
   },
 });
 
